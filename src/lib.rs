@@ -1,3 +1,4 @@
+pub mod shared;
 mod year2015;
 
 // Leaving the default example here, it's a nice way to confirm that the project is working as expected.

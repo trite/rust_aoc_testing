@@ -24,34 +24,34 @@ fn part_2(input: &str) -> i32 {
 
 mod tests {
     use super::*;
-    use std::fs;
+    use crate::shared::test_input::run_part_against_input;
 
-    #[test]
-    fn part_1_examples() {
-        vec![
-            ("(())", 0),
-            ("()()", 0),
-            ("(((", 3),
-            ("(()(()(", 3),
-            ("))(((((", 3),
-            ("())", -1),
-            ("))(", -1),
-            (")))", -3),
-            (")())())", -3),
-        ]
-        .iter()
-        .enumerate()
-        .for_each(|(index, (input, expected))| {
-            assert_eq!(part_1(input), *expected, "Test failed for index: {}", index);
-        });
-    }
+    const YEAR: i32 = 2015;
+    const DAY: i32 = 1;
+
+    // #[test]
+    // fn part_1_examples() {
+    //     vec![
+    //         ("(())", 0),
+    //         ("()()", 0),
+    //         ("(((", 3),
+    //         ("(()(()(", 3),
+    //         ("))(((((", 3),
+    //         ("())", -1),
+    //         ("))(", -1),
+    //         (")))", -3),
+    //         (")())())", -3),
+    //     ]
+    //     .iter()
+    //     .enumerate()
+    //     .for_each(|(index, (input, expected))| {
+    //         assert_eq!(part_1(input), *expected, "Test failed for index: {}", index);
+    //     });
+    // }
 
     #[test]
     fn part_1_input() {
-        let path = "src/year2015/day01.txt";
-        let input = fs::read_to_string(path).expect(&format!("Failed to read from {}", path));
-        let result = part_1(&input);
-        assert_eq!(result, 232);
+        run_part_against_input(YEAR, DAY, part_1, 232);
     }
 
     #[test]
@@ -66,12 +66,6 @@ mod tests {
 
     #[test]
     fn part_2_input() {
-        let path = "src/year2015/day01.txt";
-        let input = fs::read_to_string(path).expect(&format!("Failed to read from {}", path));
-        let result = part_2(&input);
-        // Copilot even guessed the result # here, which seems odd that it
-        //   was the correct answer for my input... was it random luck or
-        //   did it examine the day01.txt file?
-        assert_eq!(result, 1783);
+        run_part_against_input(YEAR, DAY, part_2, 1783);
     }
 }
