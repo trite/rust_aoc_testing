@@ -26,8 +26,6 @@ mod tests {
     use super::*;
     use std::fs;
 
-    // asdf
-
     #[test]
     fn part_1_examples() {
         vec![
@@ -64,5 +62,16 @@ mod tests {
             .for_each(|(index, (input, expected))| {
                 assert_eq!(part_2(input), *expected, "Test failed for index: {}", index);
             });
+    }
+
+    #[test]
+    fn part_2_input() {
+        let path = "src/year2015/day01.txt";
+        let input = fs::read_to_string(path).expect(&format!("Failed to read from {}", path));
+        let result = part_2(&input);
+        // Copilot even guessed the result # here, which seems odd that it
+        //   was the correct answer for my input... was it random luck or
+        //   did it examine the day01.txt file?
+        assert_eq!(result, 1783);
     }
 }
