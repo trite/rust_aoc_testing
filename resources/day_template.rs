@@ -7,12 +7,12 @@ pub fn part_2(input: &str) -> i32 {
 }
 
 generate_tests!(
-    -2015,
-    -1,
-    part_1,
-    part_2,
-    vec![("2x3x4", 58), ("1x1x10", 43)],
-    vec![("2x3x4", 34), ("1x1x10", 14)],
-    -1,
-    -1
+    -2015,          // year
+    -1,             // day
+    part_1,         // part 1 function
+    part_2,         // part 2 function
+    vec![("", -1)], // part 1 examples
+    vec![("", -1)], // part 2 examples
+    -1,             // part 1 expected
+    -1              // part 2 expected
 );
