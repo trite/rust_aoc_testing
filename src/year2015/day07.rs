@@ -25,6 +25,7 @@ enum Operand {
 #[derive(Debug)]
 enum ParseError {
     InvalidInput,
+    #[allow(dead_code)]
     ParseIntError(ParseIntError),
 }
 
