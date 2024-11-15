@@ -31,22 +31,24 @@ pub fn part_2(input: &str) -> i32 {
     input
         .lines()
         .filter(|line| {
-            let mut pairs = std::collections::HashSet::new();
-            let mut repeat = false;
-            let mut prev = ' ';
-            let mut prev_prev = ' ';
-            for c in line.chars() {
-                if pairs.contains(&(prev, c)) {
-                    repeat = true;
-                }
-                if prev_prev == c {
-                    repeat = true;
-                }
-                pairs.insert((prev, c));
-                prev_prev = prev;
-                prev = c;
-            }
-            repeat
+            // abc => (ab, bc)
+            // abcd => (ab, bc, cd)
+            let pairs = line.chars().collect::<Vec<_>>().windows(2);
+
+            // abcdefg => (abc, bcd, cde, def, efg)
+            let trips = line.chars().collect::<Vec<_>>().windows(3);
+
+            let repeat_pair = pairs.clone().any(|pair| {
+                pairs.clone().any(|p| p == pair)
+                    && pairs.clone().any(|p| p == pair)
+                    && pairs.clone().any(|p| p == pair)
+            });
+
+            let trip_pair = trips
+                .map(|trip| trip[0] == trip[2] && trip[0] != trip[1])
+                .any(|x| x);
+
+            repeat_pair && trip_pair
         })
         .count() as i32
 }
