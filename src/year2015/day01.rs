@@ -1,4 +1,4 @@
-fn part_1(input: &str) -> i32 {
+pub fn part_1(input: &str) -> i32 {
     input.chars().fold(0, |acc, c| match c {
         '(' => acc + 1,
         ')' => acc - 1,
@@ -6,7 +6,7 @@ fn part_1(input: &str) -> i32 {
     })
 }
 
-fn part_2(input: &str) -> i32 {
+pub fn part_2(input: &str) -> i32 {
     input
         .chars()
         .scan(0, |acc, c| {
@@ -22,32 +22,32 @@ fn part_2(input: &str) -> i32 {
         + 1
 }
 
+#[allow(unused_imports)]
+#[allow(dead_code)]
 mod tests {
     use super::*;
-    use crate::shared::test_input::run_part_against_input;
+    use crate::shared::test_input::{run_examples, run_part_against_input};
 
     const YEAR: i32 = 2015;
     const DAY: i32 = 1;
 
-    // #[test]
-    // fn part_1_examples() {
-    //     vec![
-    //         ("(())", 0),
-    //         ("()()", 0),
-    //         ("(((", 3),
-    //         ("(()(()(", 3),
-    //         ("))(((((", 3),
-    //         ("())", -1),
-    //         ("))(", -1),
-    //         (")))", -3),
-    //         (")())())", -3),
-    //     ]
-    //     .iter()
-    //     .enumerate()
-    //     .for_each(|(index, (input, expected))| {
-    //         assert_eq!(part_1(input), *expected, "Test failed for index: {}", index);
-    //     });
-    // }
+    #[test]
+    fn part_1_examples() {
+        run_examples(
+            vec![
+                ("(())", 0),
+                ("()()", 0),
+                ("(((", 3),
+                ("(()(()(", 3),
+                ("))(((((", 3),
+                ("())", -1),
+                ("))(", -1),
+                (")))", -3),
+                (")())())", -3),
+            ],
+            part_1,
+        );
+    }
 
     #[test]
     fn part_1_input() {
@@ -56,12 +56,7 @@ mod tests {
 
     #[test]
     fn part_2_examples() {
-        vec![(")", 1), ("()())", 5)]
-            .iter()
-            .enumerate()
-            .for_each(|(index, (input, expected))| {
-                assert_eq!(part_2(input), *expected, "Test failed for index: {}", index);
-            });
+        run_examples(vec![(")", 1), ("()())", 5)], part_2);
     }
 
     #[test]
