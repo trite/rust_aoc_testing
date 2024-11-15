@@ -31,22 +31,18 @@ pub fn part_2(input: &str) -> i32 {
     input
         .lines()
         .filter(|line| {
-            // abc => (ab, bc)
-            // abcd => (ab, bc, cd)
-            let pairs = line.chars().collect::<Vec<_>>().windows(2);
+            let binding = line.chars().collect::<Vec<_>>();
+            let pairs: Vec<_> = binding.windows(2).collect();
+            let trips: Vec<_> = binding.windows(3).collect();
 
-            // abcdefg => (abc, bcd, cde, def, efg)
-            let trips = line.chars().collect::<Vec<_>>().windows(3);
-
-            let repeat_pair = pairs.clone().any(|pair| {
-                pairs.clone().any(|p| p == pair)
-                    && pairs.clone().any(|p| p == pair)
-                    && pairs.clone().any(|p| p == pair)
-            });
+            let repeat_pair = pairs
+                .iter()
+                .enumerate()
+                .any(|(i, pair)| pairs.iter().skip(i + 2).any(|p| p == pair));
 
             let trip_pair = trips
-                .map(|trip| trip[0] == trip[2] && trip[0] != trip[1])
-                .any(|x| x);
+                .iter()
+                .any(|trip| trip[0] == trip[2] && trip[0] != trip[1]);
 
             repeat_pair && trip_pair
         })
