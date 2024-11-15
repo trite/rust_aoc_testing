@@ -24,16 +24,19 @@ pub fn part_2(input: &str) -> i32 {
 
 #[allow(unused_imports)]
 #[allow(dead_code)]
+#[cfg(test)]
 mod tests {
     use super::*;
-    use crate::shared::test_input::{run_examples, run_part_against_input};
-
-    const YEAR: i32 = 2015;
-    const DAY: i32 = 1;
+    use crate::shared::test_input::{get_input, run_tests};
+    use test_case::test_case;
 
     #[test]
-    fn part_1_examples() {
-        run_examples(
+    fn run_all_tests() {
+        run_tests(
+            2015,
+            1,
+            part_1,
+            part_2,
             vec![
                 ("(())", 0),
                 ("()()", 0),
@@ -45,22 +48,38 @@ mod tests {
                 (")))", -3),
                 (")())())", -3),
             ],
-            part_1,
+            vec![(")", 1), ("()())", 5)],
+            232,
+            1783,
         );
     }
 
-    #[test]
-    fn part_1_input() {
-        run_part_against_input(YEAR, DAY, part_1, 232);
+    #[test_case("(())", 0; "example 1")]
+    #[test_case("()()", 0; "example 2")]
+    #[test_case("(((", 3; "example 3")]
+    #[test_case("(()(()(", 3; "example 4")]
+    #[test_case("))(((((", 3; "example 5")]
+    #[test_case("())", -1; "example 6")]
+    #[test_case("))(", -1; "example 7")]
+    #[test_case(")))", -3; "example 8")]
+    #[test_case(")())())", -3; "example 9")]
+    fn part_1_examples(input: &str, expected: i32) {
+        assert_eq!(part_1(input), expected);
     }
 
-    #[test]
-    fn part_2_examples() {
-        run_examples(vec![(")", 1), ("()())", 5)], part_2);
+    #[test_case((2015, 1) => 232)]
+    fn part_1_input((year, day): (i32, i32)) -> i32 {
+        part_1(&get_input(year, day))
     }
 
-    #[test]
-    fn part_2_input() {
-        run_part_against_input(YEAR, DAY, part_2, 1783);
+    #[test_case(")", 1; "example 1")]
+    #[test_case("()())", 5; "example 2")]
+    fn part_2_examples(input: &str, expected: i32) {
+        assert_eq!(part_2(input), expected);
+    }
+
+    #[test_case((2015, 1) => 1783)]
+    fn part_2_input((year, day): (i32, i32)) -> i32 {
+        part_2(&get_input(year, day))
     }
 }

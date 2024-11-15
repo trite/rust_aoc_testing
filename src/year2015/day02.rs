@@ -36,29 +36,19 @@ pub fn part_2(input: &str) -> i32 {
 #[allow(dead_code)]
 mod tests {
     use super::*;
-    use crate::shared::test_input::{run_examples, run_part_against_input};
-    use std::fs;
-
-    const YEAR: i32 = 2015;
-    const DAY: i32 = 2;
+    use crate::shared::test_input::run_tests;
 
     #[test]
-    fn part_1_examples() {
-        run_examples(vec![("2x3x4", 58), ("1x1x10", 43)], part_1);
-    }
-
-    #[test]
-    fn part_1_input() {
-        run_part_against_input(YEAR, DAY, part_1, 1606483);
-    }
-
-    #[test]
-    fn part_2_examples() {
-        run_examples(vec![("2x3x4", 34), ("1x1x10", 14)], part_2);
-    }
-
-    #[test]
-    fn part_2_input() {
-        run_part_against_input(YEAR, DAY, part_2, 3842356);
+    fn run_all_tests() {
+        run_tests(
+            2015,
+            2,
+            part_1,
+            part_2,
+            vec![("2x3x4", 58), ("1x1x10", 43)],
+            vec![("2x3x4", 34), ("1x1x10", 14)],
+            1606483,
+            3842356, // Replace with the expected result for part_2
+        );
     }
 }
