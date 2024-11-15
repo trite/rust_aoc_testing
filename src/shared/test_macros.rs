@@ -1,6 +1,15 @@
 #[macro_export]
 macro_rules! generate_tests {
-    ($year:expr, $day:expr, $part_1:ident, $part_2:ident, $part_1_examples:expr, $part_2_examples:expr, $part_1_expected:expr, $part_2_expected:expr) => {
+    (
+        $year:expr,
+        $day:expr,
+        $part_1:ident,
+        $part_2:ident,
+        $part_1_examples:expr,
+        $part_2_examples:expr,
+        $part_1_expected:expr,
+        $part_2_expected:expr
+    ) => {
         #[cfg(test)]
         mod tests {
             use super::*;
