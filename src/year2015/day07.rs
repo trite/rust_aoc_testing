@@ -1,17 +1,12 @@
 use std::num::ParseIntError;
 
 enum Operation {
-    Assign(ValOrVar, String),
+    Assign(i32, String),
     And(String, String, String),
     Or(String, String, String),
     LShift(String, i32, String),
     RShift(String, i32, String),
     Not(String, String),
-}
-
-enum ValOrVar {
-    Value(i32),
-    Variable(String),
 }
 
 #[derive(Debug)]
@@ -55,16 +50,12 @@ fn parse_line(line: &str) -> Result<Operation, ParseError> {
         ["NOT", value, "->", dest] => {
             Ok(Operation::Not(value.to_string(), dest.to_string()))
         }
-        [source, "->", dest] => {
-            if let Ok(value) = source.parse() {
-                Ok(Operation::Assign(ValOrVar::Value(value), dest.to_string()))
-            } else {
-                Ok(Operation::Assign(
-                    ValOrVar::Variable(source.to_string()),
-                    dest.to_string(),
-                ))
-            }
-        }
+        [source, "->", dest] => value
+            .parse()
+            .map(|value| {
+                Operation::Assign(source.to_string(), dest.to_string())
+            })
+            .map_err(ParseError::from),
         _ => Err(ParseError::InvalidInput),
     }
 }
@@ -85,22 +76,23 @@ pub fn part_1(input: &str) -> i32 {
         }
     }
 
+    // if operations.iter().any(|op| op.is_err()) {
+    //     panic!("Invalid input");
+    // }
+
     let mut values = std::collections::HashMap::new();
     let mut resolved = std::collections::HashMap::new();
 
     while resolved.len() < operations.len() {
         for operation in &operations {
             match operation {
-                Ok(Operation::Assign(operand, dest)) => match operand {
-                    &ValOrVar::Value(value) => {
-                        values.insert(dest.clone(), value);
+                Ok(Operation::Assign(value, dest)) => {
+                    if values.contains_key(dest) {
+                        resolved.insert(dest.clone(), values[dest]);
+                    } else {
+                        values.insert(dest.clone(), *value);
                     }
-                    &ValOrVar::Variable(var) => {
-                        if let Some(value) = values.get(&var) {
-                            values.insert(dest.clone(), *value);
-                        }
-                    }
-                },
+                }
                 Ok(Operation::And(left, right, dest)) => {
                     if values.contains_key(left) && values.contains_key(right) {
                         values
