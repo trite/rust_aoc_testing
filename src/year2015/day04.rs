@@ -4,7 +4,7 @@ use std::sync::Arc;
 
 // set to false to run full solution
 // set to true to cheat for quick unit tests when not working on this problem
-const QUICK_RUN: bool = true;
+const QUICK_RUN: bool = false;
 
 pub fn part_1(input: &str) -> i32 {
     if QUICK_RUN {
