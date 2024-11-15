@@ -9,8 +9,10 @@ pub fn part_1(input: &str) -> i32 {
             (parts[1], parts[2], parts[4])
         };
 
-        let start_coords: Vec<usize> = start.split(',').map(|x| x.parse().unwrap()).collect();
-        let end_coords: Vec<usize> = end.split(',').map(|x| x.parse().unwrap()).collect();
+        let start_coords: Vec<usize> =
+            start.split(',').map(|x| x.parse().unwrap()).collect();
+        let end_coords: Vec<usize> =
+            end.split(',').map(|x| x.parse().unwrap()).collect();
 
         for x in start_coords[0]..=end_coords[0] {
             for y in start_coords[1]..=end_coords[1] {
@@ -38,8 +40,10 @@ pub fn part_2(input: &str) -> i32 {
             (parts[1], parts[2], parts[4])
         };
 
-        let start_coords: Vec<usize> = start.split(',').map(|x| x.parse().unwrap()).collect();
-        let end_coords: Vec<usize> = end.split(',').map(|x| x.parse().unwrap()).collect();
+        let start_coords: Vec<usize> =
+            start.split(',').map(|x| x.parse().unwrap()).collect();
+        let end_coords: Vec<usize> =
+            end.split(',').map(|x| x.parse().unwrap()).collect();
 
         for x in start_coords[0]..=end_coords[0] {
             for y in start_coords[1]..=end_coords[1] {

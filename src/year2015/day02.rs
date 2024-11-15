@@ -2,7 +2,8 @@ pub fn part_1(input: &str) -> i32 {
     input
         .lines()
         .map(|line| {
-            let mut dimensions = line.split('x').map(|x| x.parse::<i32>().unwrap());
+            let mut dimensions =
+                line.split('x').map(|x| x.parse::<i32>().unwrap());
             let l = dimensions.next().unwrap();
             let w = dimensions.next().unwrap();
             let h = dimensions.next().unwrap();
@@ -18,7 +19,8 @@ pub fn part_2(input: &str) -> i32 {
     input
         .lines()
         .map(|line| {
-            let mut dimensions = line.split('x').map(|x| x.parse::<i32>().unwrap());
+            let mut dimensions =
+                line.split('x').map(|x| x.parse::<i32>().unwrap());
             let l = dimensions.next().unwrap();
             let w = dimensions.next().unwrap();
             let h = dimensions.next().unwrap();

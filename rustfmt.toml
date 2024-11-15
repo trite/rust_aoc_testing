@@ -1,0 +1,3 @@
+max_width = 80
+fn_args_layout = "Vertical"
+struct_lit_multiline_style = "ForceMulti"
