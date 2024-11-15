@@ -6,3 +6,4 @@ build:
 
 crate-versions:
   cargo tree --depth 1
+  
