@@ -1,5 +1,11 @@
 use std::num::ParseIntError;
 
+enum Resolved {
+    Resolved(i32),
+    Unresolved(Operation),
+}
+
+#[derive(Clone, Debug)]
 enum Operation {
     Assign(Operand, String),
     And(String, String, String),
@@ -9,6 +15,7 @@ enum Operation {
     Not(String, String),
 }
 
+#[derive(Clone, Debug)]
 enum Operand {
     Value(i32),
     Wire(String),
@@ -70,6 +77,37 @@ fn parse_line(line: &str) -> Result<Operation, ParseError> {
 }
 
 pub fn part_1(input: &str) -> i32 {
+    let operations: Vec<Operation> = input
+        .lines()
+        .map(|line| parse_line(line).expect("Invalid input"))
+        .collect();
+
+    let mut state: std::collections::HashMap<String, Resolved> =
+        std::collections::HashMap::new();
+
+    for operation in &operations {
+        match operation {
+            Operation::Assign(Operand::Value(value), dest) => {
+                state.insert(dest.clone(), Resolved::Resolved(*value));
+            }
+            Operation::Assign(_, dest)
+            | Operation::And(_, _, dest)
+            | Operation::Or(_, _, dest)
+            | Operation::LShift(_, _, dest)
+            | Operation::RShift(_, _, dest)
+            | Operation::Not(_, dest) => {
+                state.insert(
+                    dest.clone(),
+                    Resolved::Unresolved(operation.clone()),
+                );
+            }
+        }
+    }
+
+    // for operation in &operations {
+    //     println!("{:?}", operation);
+    // }
+
     panic!("Not yet implemented");
 }
 
