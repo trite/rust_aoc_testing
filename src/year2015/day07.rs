@@ -1,12 +1,17 @@
 use std::num::ParseIntError;
 
 enum Operation {
-    Assign(i32, String),
+    Assign(Operand, String),
     And(String, String, String),
     Or(String, String, String),
     LShift(String, i32, String),
     RShift(String, i32, String),
     Not(String, String),
+}
+
+enum Operand {
+    Value(i32),
+    Wire(String),
 }
 
 #[derive(Debug)]
@@ -50,84 +55,22 @@ fn parse_line(line: &str) -> Result<Operation, ParseError> {
         ["NOT", value, "->", dest] => {
             Ok(Operation::Not(value.to_string(), dest.to_string()))
         }
-        [source, "->", dest] => value
-            .parse()
-            .map(|value| {
-                Operation::Assign(source.to_string(), dest.to_string())
-            })
-            .map_err(ParseError::from),
+        [value, "->", dest] => {
+            if let Ok(num) = value.parse() {
+                Ok(Operation::Assign(Operand::Value(num), dest.to_string()))
+            } else {
+                Ok(Operation::Assign(
+                    Operand::Wire(value.to_string()),
+                    dest.to_string(),
+                ))
+            }
+        }
         _ => Err(ParseError::InvalidInput),
     }
 }
 
 pub fn part_1(input: &str) -> i32 {
-    let mut operations: Vec<Result<Operation, ParseError>> = Vec::new();
-    for line in input.lines() {
-        match parse_line(line) {
-            Ok(op) => operations.push(Ok(op)),
-            Err(ParseError::InvalidInput) => {
-                eprintln!("Invalid input: {}", line);
-                panic!("Invalid input");
-            }
-            Err(ParseError::ParseIntError(err)) => {
-                eprintln!("ParseIntError: {}, for input: {}", err, line);
-                panic!("Invalid input");
-            }
-        }
-    }
-
-    // if operations.iter().any(|op| op.is_err()) {
-    //     panic!("Invalid input");
-    // }
-
-    let mut values = std::collections::HashMap::new();
-    let mut resolved = std::collections::HashMap::new();
-
-    while resolved.len() < operations.len() {
-        for operation in &operations {
-            match operation {
-                Ok(Operation::Assign(value, dest)) => {
-                    if values.contains_key(dest) {
-                        resolved.insert(dest.clone(), values[dest]);
-                    } else {
-                        values.insert(dest.clone(), *value);
-                    }
-                }
-                Ok(Operation::And(left, right, dest)) => {
-                    if values.contains_key(left) && values.contains_key(right) {
-                        values
-                            .insert(dest.clone(), values[left] & values[right]);
-                    }
-                }
-                Ok(Operation::Or(left, right, dest)) => {
-                    if values.contains_key(left) && values.contains_key(right) {
-                        values
-                            .insert(dest.clone(), values[left] | values[right]);
-                    }
-                }
-                Ok(Operation::LShift(left, amount, dest)) => {
-                    if values.contains_key(left) {
-                        values.insert(dest.clone(), values[left] << amount);
-                    }
-                }
-                Ok(Operation::RShift(left, amount, dest)) => {
-                    if values.contains_key(left) {
-                        values.insert(dest.clone(), values[left] >> amount);
-                    }
-                }
-                Ok(Operation::Not(value, dest)) => {
-                    if values.contains_key(value) {
-                        values.insert(dest.clone(), !values[value].clone());
-                    }
-                }
-                Err(_) => {
-                    /* Already handled by the "Invalid Input" check(s) above */
-                }
-            }
-        }
-    }
-
-    values["a"]
+    panic!("Not yet implemented");
 }
 
 pub fn part_2(input: &str) -> i32 {
