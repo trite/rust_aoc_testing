@@ -22,8 +22,8 @@ macro_rules! generate_tests {
                 run_examples(examples, part);
             }
 
-            #[test_case($year, $day, $part_1, $part_1_expected)]
-            #[test_case($year, $day, $part_2, $part_2_expected)]
+            #[test_case($year, $day, $part_1, $part_1_expected; "part_1_actual")]
+            #[test_case($year, $day, $part_2, $part_2_expected; "part_2_actual")]
             fn actual_input(year: i32, day: i32, part: fn(&str) -> i32, expected: i32) {
                 run_part_against_input(year, day, part, expected);
             }
