@@ -233,7 +233,177 @@ pub fn part_1(input: &str) -> i32 {
 }
 
 pub fn part_2(input: &str) -> i32 {
-    panic!("Not yet implemented");
+    let operations: Vec<Operation> = input
+        .lines()
+        .map(|line| parse_line(line).expect("Invalid input"))
+        .collect();
+
+    let mut state: std::collections::HashMap<String, ResolveState> =
+        std::collections::HashMap::new();
+
+    for operation in &operations {
+        match operation {
+            Operation::Assign(Operand::Value(value), dest) => {
+                state.insert(dest.clone(), ResolveState::Resolved(*value));
+            }
+            Operation::Assign(_, dest)
+            | Operation::And(_, _, dest)
+            | Operation::Or(_, _, dest)
+            | Operation::LShift(_, _, dest)
+            | Operation::RShift(_, _, dest)
+            | Operation::Not(_, dest) => {
+                state.insert(
+                    dest.clone(),
+                    ResolveState::Unresolved(operation.clone()),
+                );
+            }
+        }
+    }
+
+    let a_value = part_1(input);
+    state.insert("b".to_string(), ResolveState::Resolved(a_value));
+
+    for operation in &operations {
+        match operation {
+            Operation::Assign(Operand::Value(value), dest) => {
+                if dest != "b" {
+                    state.insert(dest.clone(), ResolveState::Resolved(*value));
+                }
+            }
+            Operation::Assign(_, dest)
+            | Operation::And(_, _, dest)
+            | Operation::Or(_, _, dest)
+            | Operation::LShift(_, _, dest)
+            | Operation::RShift(_, _, dest)
+            | Operation::Not(_, dest) => {
+                if dest != "b" {
+                    state.insert(
+                        dest.clone(),
+                        ResolveState::Unresolved(operation.clone()),
+                    );
+                }
+            }
+        }
+    }
+
+    loop {
+        let mut progress = false;
+
+        for (_key, value) in state.clone() {
+            if let ResolveState::Unresolved(operation) = value {
+                match operation {
+                    Operation::Assign(Operand::Wire(ref var), ref dest) => {
+                        if let Some(ResolveState::Resolved(val)) =
+                            state.get(var)
+                        {
+                            state.insert(
+                                dest.clone(),
+                                ResolveState::Resolved(*val),
+                            );
+                            progress = true;
+                        }
+                    }
+                    Operation::And(
+                        Operand::Wire(ref left),
+                        ref right,
+                        ref dest,
+                    ) => {
+                        if let (
+                            Some(ResolveState::Resolved(left_val)),
+                            Some(ResolveState::Resolved(right_val)),
+                        ) = (state.get(left), state.get(right))
+                        {
+                            state.insert(
+                                dest.clone(),
+                                ResolveState::Resolved(left_val & right_val),
+                            );
+                            progress = true;
+                        }
+                    }
+                    Operation::And(
+                        Operand::Value(left_val),
+                        ref right,
+                        ref dest,
+                    ) => {
+                        if let Some(ResolveState::Resolved(right_val)) =
+                            state.get(right)
+                        {
+                            state.insert(
+                                dest.clone(),
+                                ResolveState::Resolved(left_val & right_val),
+                            );
+                            progress = true;
+                        }
+                    }
+                    Operation::Or(ref left, ref right, ref dest) => {
+                        if let (
+                            Some(ResolveState::Resolved(left_val)),
+                            Some(ResolveState::Resolved(right_val)),
+                        ) = (state.get(left), state.get(right))
+                        {
+                            state.insert(
+                                dest.clone(),
+                                ResolveState::Resolved(left_val | right_val),
+                            );
+                            progress = true;
+                        }
+                    }
+                    Operation::LShift(ref left, amount, ref dest) => {
+                        if let Some(ResolveState::Resolved(left_val)) =
+                            state.get(left)
+                        {
+                            state.insert(
+                                dest.clone(),
+                                ResolveState::Resolved(left_val << amount),
+                            );
+                            progress = true;
+                        }
+                    }
+                    Operation::RShift(ref left, amount, ref dest) => {
+                        if let Some(ResolveState::Resolved(left_val)) =
+                            state.get(left)
+                        {
+                            state.insert(
+                                dest.clone(),
+                                ResolveState::Resolved(left_val >> amount),
+                            );
+                            progress = true;
+                        }
+                    }
+                    Operation::Not(ref value, ref dest) => {
+                        if let Some(ResolveState::Resolved(val)) =
+                            state.get(value)
+                        {
+                            state.insert(
+                                dest.clone(),
+                                ResolveState::Resolved(!val),
+                            );
+                            progress = true;
+                        }
+                    }
+                    _ => {}
+                }
+            }
+        }
+
+        if !progress {
+            println!("{:?}", state);
+            panic!("No progress made, possible circular dependency or unresolved operations");
+        }
+
+        if state
+            .values()
+            .all(|v| matches!(v, ResolveState::Resolved(_)))
+        {
+            break;
+        }
+    }
+
+    if let Some(ResolveState::Resolved(result)) = state.get("a") {
+        *result
+    } else {
+        panic!("Value for 'a' not found")
+    }
 }
 
 generate_tests!(
