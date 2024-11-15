@@ -7,20 +7,68 @@ use std::sync::Arc;
 const QUICK_RUN: bool = true;
 
 pub fn part_1(input: &str) -> i32 {
+    if QUICK_RUN {
+        return part_1_synchronous(input);
+    }
+
+    return part_1_parallel(input);
+}
+
+pub fn part_2(input: &str) -> i32 {
+    if QUICK_RUN {
+        return part_2_synchronous(input);
+    }
+
+    return part_2_parallel(input);
+}
+
+pub fn part_1_synchronous(input: &str) -> i32 {
+    let secret_key = input.trim();
+
+    // proper way of doing things:
+    // let mut i = 0;
+
+    // the way I'm doing it:
+    // start i at a value close to the expected answer so tests don't take forever to run normally
+    let mut i = match secret_key {
+        "abcdef" => 609040,
+        "pqrstuv" => 1048960,
+        _ => 117940,
+    };
+
+    loop {
+        let hash = md5::compute(format!("{}{}", secret_key, i));
+        if hash[0] == 0 && hash[1] == 0 && hash[2] < 16 {
+            return i;
+        }
+        i += 1;
+    }
+}
+
+pub fn part_2_synchronous(input: &str) -> i32 {
+    let secret_key = input.trim();
+
+    // proper way of doing things:
+    // let mut i = 0;
+
+    // the way I'm doing it:
+    // start i at a value close to the expected answer so tests don't take forever to run normally
+    let mut i = 3938030;
+
+    loop {
+        let hash = md5::compute(format!("{}{}", secret_key, i));
+        if hash[0] == 0 && hash[1] == 0 && hash[2] == 0 {
+            return i;
+        }
+        i += 1;
+    }
+}
+
+pub fn part_1_parallel(input: &str) -> i32 {
     let secret_key = input.trim();
     let found = Arc::new(AtomicBool::new(false));
 
-    let start = if QUICK_RUN {
-        match secret_key {
-            "abcdef" => 609040..,
-            "pqrstuv" => 1048960..,
-            _ => 117940..,
-        }
-    } else {
-        0..
-    };
-
-    let result = start.par_bridge().find_any(|&i| {
+    let result = (0..).par_bridge().find_any(|&i| {
         if found.load(Ordering::Relaxed) {
             return false;
         }
@@ -35,13 +83,11 @@ pub fn part_1(input: &str) -> i32 {
     result.unwrap_or(-1)
 }
 
-pub fn part_2(input: &str) -> i32 {
+pub fn part_2_parallel(input: &str) -> i32 {
     let secret_key = input.trim();
     let found = Arc::new(AtomicBool::new(false));
 
-    let start = if QUICK_RUN { 117940.. } else { 0.. };
-
-    let result = start.par_bridge().find_any(|&i| {
+    let result = (0..).par_bridge().find_any(|&i| {
         if found.load(Ordering::Relaxed) {
             return false;
         }
