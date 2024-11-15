@@ -38,11 +38,18 @@ fn parse_line(line: &str) -> Result<Operation, ParseError> {
     let parts: Vec<&str> = line.split_whitespace().collect();
 
     match parts.as_slice() {
-        [left, "AND", right, "->", dest] => Ok(Operation::And(
-            left.to_string(),
-            right.to_string(),
-            dest.to_string(),
-        )),
+        [left, "AND", right, "->", dest] => {
+            let left_operand = if let Ok(num) = left.parse() {
+                Operand::Value(num)
+            } else {
+                Operand::Wire(left.to_string())
+            };
+            Ok(Operation::And(
+                left_operand,
+                right.to_string(),
+                dest.to_string(),
+            ))
+        }
         [left, "OR", right, "->", dest] => Ok(Operation::Or(
             left.to_string(),
             right.to_string(),
@@ -108,7 +115,7 @@ pub fn part_1(input: &str) -> i32 {
     loop {
         let mut progress = false;
 
-        for (key, value) in state.clone() {
+        for (_key, value) in state.clone() {
             if let ResolveState::Unresolved(operation) = value {
                 match operation {
                     Operation::Assign(Operand::Wire(ref var), ref dest) => {
@@ -122,11 +129,30 @@ pub fn part_1(input: &str) -> i32 {
                             progress = true;
                         }
                     }
-                    Operation::And(ref left, ref right, ref dest) => {
+                    Operation::And(
+                        Operand::Wire(ref left),
+                        ref right,
+                        ref dest,
+                    ) => {
                         if let (
                             Some(ResolveState::Resolved(left_val)),
                             Some(ResolveState::Resolved(right_val)),
                         ) = (state.get(left), state.get(right))
+                        {
+                            state.insert(
+                                dest.clone(),
+                                ResolveState::Resolved(left_val & right_val),
+                            );
+                            progress = true;
+                        }
+                    }
+                    Operation::And(
+                        Operand::Value(left_val),
+                        ref right,
+                        ref dest,
+                    ) => {
+                        if let Some(ResolveState::Resolved(right_val)) =
+                            state.get(right)
                         {
                             state.insert(
                                 dest.clone(),
