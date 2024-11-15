@@ -1,5 +1,6 @@
-test:
-  cargo nextest run
+# TODO: Do this less badly
+test backtrace="nope":
+  {{ if backtrace != "nope" { "RUST_BACKTRACE=1" } else { "" } }} cargo nextest run
 
 build:
   cargo build
