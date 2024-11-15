@@ -1,3 +1,4 @@
+#[macro_use]
 pub mod shared;
 pub mod year2015;
 

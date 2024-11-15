@@ -32,23 +32,13 @@ pub fn part_2(input: &str) -> i32 {
         .sum()
 }
 
-#[allow(unused_imports)]
-#[allow(dead_code)]
-mod tests {
-    use super::*;
-    use crate::shared::test_input::run_tests;
-
-    #[test]
-    fn run_all_tests() {
-        run_tests(
-            2015,
-            2,
-            part_1,
-            part_2,
-            vec![("2x3x4", 58), ("1x1x10", 43)],
-            vec![("2x3x4", 34), ("1x1x10", 14)],
-            1606483,
-            3842356, // Replace with the expected result for part_2
-        );
-    }
-}
+generate_tests!(
+    2015,
+    2,
+    part_1,
+    part_2,
+    vec![("2x3x4", 58), ("1x1x10", 43)],
+    vec![("2x3x4", 34), ("1x1x10", 14)],
+    1606483,
+    3842356
+);
