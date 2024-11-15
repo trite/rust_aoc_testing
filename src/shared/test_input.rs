@@ -16,22 +16,13 @@ pub fn run_examples(examples: Vec<(&str, i32)>, part: fn(&str) -> i32) {
         .iter()
         .enumerate()
         .for_each(|(index, (input, expected))| {
-            assert_eq!(part(input), *expected, "Test failed for index: {}", index);
+            assert_eq!(
+                part(input),
+                *expected,
+                "Test failed for index: {}, example: ({}, {})",
+                index,
+                input,
+                expected
+            );
         });
 }
-
-// pub fn run_tests(
-//     year: i32,
-//     day: i32,
-//     part_1: fn(&str) -> i32,
-//     part_2: fn(&str) -> i32,
-//     part_1_examples: Vec<(&str, i32)>,
-//     part_2_examples: Vec<(&str, i32)>,
-//     part_1_expected: i32,
-//     part_2_expected: i32,
-// ) {
-//     run_examples(part_1_examples, part_1);
-//     run_part_against_input(year, day, part_1, part_1_expected);
-//     run_examples(part_2_examples, part_2);
-//     run_part_against_input(year, day, part_2, part_2_expected);
-// }
