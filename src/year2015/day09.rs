@@ -30,7 +30,13 @@ fn parse(line: &str) -> Result<Route, ParseError> {
         })
 }
 
-pub fn part_1(input: &str) -> i32 {
+fn calculate_distance<F>(
+    input: &str,
+    compare: F,
+) -> u32
+where
+    F: Fn(u32, u32) -> bool,
+{
     let routes: Vec<Route> = input
         .lines()
         .map(parse)
@@ -42,7 +48,7 @@ pub fn part_1(input: &str) -> i32 {
         .flat_map(|r| vec![&r.origin, &r.destination])
         .collect();
 
-    let mut min_distance = u32::MAX;
+    let mut best_distance = if compare(u32::MAX, 0) { 0 } else { u32::MAX };
 
     for permutation in places.iter().permutations(places.len()) {
         let mut total_distance = 0;
@@ -53,20 +59,25 @@ pub fn part_1(input: &str) -> i32 {
             }) {
                 total_distance += route.distance;
             } else {
-                total_distance = u32::MAX;
+                total_distance =
+                    if compare(u32::MAX, 0) { u32::MAX } else { 0 };
                 break;
             }
         }
-        if total_distance < min_distance {
-            min_distance = total_distance;
+        if compare(total_distance, best_distance) {
+            best_distance = total_distance;
         }
     }
 
-    min_distance as i32
+    best_distance
 }
 
-pub fn part_2(_input: &str) -> i32 {
-    panic!("Not yet implemented");
+pub fn part_1(input: &str) -> i32 {
+    calculate_distance(input, |a, b| a < b) as i32
+}
+
+pub fn part_2(input: &str) -> i32 {
+    calculate_distance(input, |a, b| a > b) as i32
 }
 
 generate_tests!(
@@ -75,9 +86,9 @@ generate_tests!(
     part_1,         // part 1 function
     part_2,         // part 2 function
     vec![("London to Dublin = 464\nLondon to Belfast = 518\nDublin to Belfast = 141", 605)], // part 1 examples
-    vec![], // part 2 examples
+    vec![("London to Dublin = 464\nLondon to Belfast = 518\nDublin to Belfast = 141", 982)], // part 2 examples
     Some(207),             // part 1 expected
-    None              // part 2 expected
+    Some(804)              // part 2 expected
 );
 
 #[cfg(test)]
