@@ -76,7 +76,7 @@ generate_tests!(
     part_2,         // part 2 function
     vec![("London to Dublin = 464\nLondon to Belfast = 518\nDublin to Belfast = 141", 605)], // part 1 examples
     vec![], // part 2 examples
-    None,             // part 1 expected
+    Some(207),             // part 1 expected
     None              // part 2 expected
 );
 
@@ -92,7 +92,7 @@ mod local_tests {
             destination: "Dublin".to_string(),
             distance: 464
         });
-        "example 1 line 1"
+        "parse line 1"
     )]
     #[test_case(
         "London to Belfast = 518",
@@ -101,7 +101,7 @@ mod local_tests {
             destination: "Belfast".to_string(),
             distance: 518
         });
-        "example 1 line 2"
+        "parse line 2"
     )]
     #[test_case(
         "Dublin to Belfast = 141",
@@ -110,7 +110,7 @@ mod local_tests {
             destination: "Belfast".to_string(),
             distance: 141
         });
-        "example 1 line 3"
+        "parse line 3"
     )]
     fn parse_works(
         input: &str,
