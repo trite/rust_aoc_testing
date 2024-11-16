@@ -51,7 +51,7 @@ generate_tests!(
     part_1,                                                 // part 1 function
     part_2,                                                 // part 2 function
     vec![("\"\"\n\"abc\"\n\"aaa\\\"aaa\"\n\"\\x27\"", 12)], // part 1 examples
-    vec![],                                                 // part 2 examples
+    vec![("\"\"\n\"abc\"\n\"aaa\\\"aaa\"\n\"\\x27\"", 19)], // part 2 examples
     1342,                                                   // part 1 expected
     -1                                                      // part 2 expected
 );
