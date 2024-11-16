@@ -62,6 +62,6 @@ generate_tests!(
         "qjhvhtzxzqqjkmpb\nxxyxx\nuurcxstgmygtbstg\nieodomkazucvgmuy",
         2
     )], // part 2 examples
-    258,    // part 1 expected
-    53      // part 2 expected
+    Some(258),    // part 1 expected
+    Some(53)      // part 2 expected
 );

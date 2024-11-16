@@ -65,12 +65,12 @@ pub fn part_2(input: &str) -> i32 {
 }
 
 generate_tests!(
-    2015,     // year
-    6,        // day
-    part_1,   // part 1 function
-    part_2,   // part 2 function
-    vec![],   // part 1 examples
-    vec![],   // part 2 examples
-    543903,   // part 1 expected
-    14687245  // part 2 expected
+    2015,           // year
+    6,              // day
+    part_1,         // part 1 function
+    part_2,         // part 2 function
+    vec![],         // part 1 examples
+    vec![],         // part 2 examples
+    Some(543903),   // part 1 expected
+    Some(14687245)  // part 2 expected
 );

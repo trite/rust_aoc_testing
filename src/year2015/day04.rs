@@ -108,7 +108,7 @@ generate_tests!(
     part_1,                                         // part 1 function
     part_2,                                         // part 2 function
     vec![("abcdef", 609043), ("pqrstuv", 1048970)], // part 1 examples
-    vec![],  // part 2 examples (blank here since not provided)
-    117946,  // part 1 expected
-    3938038  // part 2 expected
+    vec![],        // part 2 examples (blank here since not provided)
+    Some(117946),  // part 1 expected
+    Some(3938038)  // part 2 expected
 );

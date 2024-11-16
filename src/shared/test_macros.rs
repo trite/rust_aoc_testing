@@ -33,9 +33,11 @@ macro_rules! generate_tests {
                 year: i32,
                 day: i32,
                 part: fn(&str) -> i32,
-                expected: i32,
+                expected: Option<i32>,
             ) {
-                run_part_against_input(year, day, part, expected);
+                expected.iter().for_each(|expected| {
+                    run_part_against_input(year, day, part, *expected);
+                });
             }
         }
     };

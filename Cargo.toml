@@ -6,6 +6,7 @@ edition = "2021"
 [dependencies]
 md5 = "*"
 rayon = "*"
+itertools = "*"
 
 [dev-dependencies]
 test-case = "3.3.1"
