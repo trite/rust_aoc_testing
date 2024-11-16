@@ -42,7 +42,18 @@ pub fn part_1(input: &str) -> i32 {
 }
 
 pub fn part_2(input: &str) -> i32 {
-    panic!("Not yet implemented");
+    let original_char_code_sum: i32 =
+        input.lines().map(|line| parse_line(line).0).sum();
+
+    let escaped_char_code_sum: i32 = input
+        .lines()
+        .map(|line| {
+            let escaped = line.replace("\\", "\\\\").replace("\"", "\\\"");
+            parse_line(&format!("\"{}\"", escaped)).0
+        })
+        .sum();
+
+    escaped_char_code_sum - original_char_code_sum
 }
 
 generate_tests!(
@@ -53,5 +64,5 @@ generate_tests!(
     vec![("\"\"\n\"abc\"\n\"aaa\\\"aaa\"\n\"\\x27\"", 12)], // part 1 examples
     vec![("\"\"\n\"abc\"\n\"aaa\\\"aaa\"\n\"\\x27\"", 19)], // part 2 examples
     1342,                                                   // part 1 expected
-    -1                                                      // part 2 expected
+    2074                                                    // part 2 expected
 );
