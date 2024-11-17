@@ -70,7 +70,7 @@ generate_tests!(
     vec![],                       // part 1 examples
     vec![],                       // part 2 examples
     Some("hxbxxyzz".to_string()), // run part 1, expect -1 since we don't know the right answer yet
-    Some("".to_string())          // don't run part 2 until we're ready
+    Some("hxcaabcc".to_string())  // don't run part 2 until we're ready
 );
 
 #[cfg(test)]
