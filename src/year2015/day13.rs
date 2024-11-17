@@ -1,7 +1,7 @@
 use itertools::Itertools;
 use std::collections::HashMap;
 
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, Clone)]
 struct Happiness {
     person: String,
     neighbor: String,
@@ -65,6 +65,32 @@ fn calculate_max_happiness(happiness_list: Vec<Happiness>) -> i32 {
     max_happiness
 }
 
+fn add_you_to_happiness_list(happiness_list: Vec<Happiness>) -> Vec<Happiness> {
+    let mut new_happiness_list = happiness_list.clone();
+    let mut unique_people: Vec<String> = Vec::new();
+
+    for happiness in happiness_list.iter() {
+        if !unique_people.contains(&happiness.person) {
+            unique_people.push(happiness.person.clone());
+        }
+    }
+
+    for person in unique_people {
+        new_happiness_list.push(Happiness {
+            person: "you".to_string(),
+            neighbor: person.clone(),
+            change: 0,
+        });
+        new_happiness_list.push(Happiness {
+            person: person,
+            neighbor: "you".to_string(),
+            change: 0,
+        });
+    }
+
+    new_happiness_list
+}
+
 pub fn part_1(input: &str) -> i32 {
     let happiness_list: Vec<Happiness> =
         input.lines().map(Happiness::parse).flatten().collect();
@@ -72,8 +98,13 @@ pub fn part_1(input: &str) -> i32 {
     calculate_max_happiness(happiness_list)
 }
 
-pub fn part_2(_input: &str) -> i32 {
-    panic!("Not yet implemented");
+pub fn part_2(input: &str) -> i32 {
+    let happiness_list: Vec<Happiness> =
+        input.lines().map(Happiness::parse).flatten().collect();
+
+    let updated_happiness_list = add_you_to_happiness_list(happiness_list);
+
+    calculate_max_happiness(updated_happiness_list)
 }
 
 generate_tests!(
@@ -87,7 +118,7 @@ generate_tests!(
     )],
     vec![],
     Some(709),
-    None
+    Some(668)
 );
 
 #[cfg(test)]
@@ -264,5 +295,102 @@ mod local_tests {
         ];
 
         assert_eq!(calculate_max_happiness(happiness_list), 330);
+    }
+
+    #[test]
+    fn test_add_you_to_happiness_list() {
+        let happiness_list = vec![
+            Happiness::parse(
+                "Alice would gain 54 happiness units by sitting next to Bob.",
+            )
+            .unwrap(),
+            Happiness::parse(
+                "Alice would lose 79 happiness units by sitting next to Carol.",
+            )
+            .unwrap(),
+            Happiness::parse(
+                "Alice would lose 2 happiness units by sitting next to David.",
+            )
+            .unwrap(),
+            Happiness::parse(
+                "Bob would gain 83 happiness units by sitting next to Alice.",
+            )
+            .unwrap(),
+            Happiness::parse(
+                "Bob would lose 7 happiness units by sitting next to Carol.",
+            )
+            .unwrap(),
+            Happiness::parse(
+                "Bob would lose 63 happiness units by sitting next to David.",
+            )
+            .unwrap(),
+            Happiness::parse(
+                "Carol would lose 62 happiness units by sitting next to Alice.",
+            )
+            .unwrap(),
+            Happiness::parse(
+                "Carol would gain 60 happiness units by sitting next to Bob.",
+            )
+            .unwrap(),
+            Happiness::parse(
+                "Carol would gain 55 happiness units by sitting next to David.",
+            )
+            .unwrap(),
+            Happiness::parse(
+                "David would gain 46 happiness units by sitting next to Alice.",
+            )
+            .unwrap(),
+            Happiness::parse(
+                "David would lose 7 happiness units by sitting next to Bob.",
+            )
+            .unwrap(),
+            Happiness::parse(
+                "David would gain 41 happiness units by sitting next to Carol.",
+            )
+            .unwrap(),
+        ];
+
+        let updated_happiness_list = add_you_to_happiness_list(happiness_list);
+
+        assert!(updated_happiness_list.contains(&Happiness {
+            person: "you".to_string(),
+            neighbor: "Alice".to_string(),
+            change: 0,
+        }));
+        assert!(updated_happiness_list.contains(&Happiness {
+            person: "Alice".to_string(),
+            neighbor: "you".to_string(),
+            change: 0,
+        }));
+        assert!(updated_happiness_list.contains(&Happiness {
+            person: "you".to_string(),
+            neighbor: "Bob".to_string(),
+            change: 0,
+        }));
+        assert!(updated_happiness_list.contains(&Happiness {
+            person: "Bob".to_string(),
+            neighbor: "you".to_string(),
+            change: 0,
+        }));
+        assert!(updated_happiness_list.contains(&Happiness {
+            person: "you".to_string(),
+            neighbor: "Carol".to_string(),
+            change: 0,
+        }));
+        assert!(updated_happiness_list.contains(&Happiness {
+            person: "Carol".to_string(),
+            neighbor: "you".to_string(),
+            change: 0,
+        }));
+        assert!(updated_happiness_list.contains(&Happiness {
+            person: "you".to_string(),
+            neighbor: "David".to_string(),
+            change: 0,
+        }));
+        assert!(updated_happiness_list.contains(&Happiness {
+            person: "David".to_string(),
+            neighbor: "you".to_string(),
+            change: 0,
+        }));
     }
 }
