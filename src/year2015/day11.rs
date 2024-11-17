@@ -62,14 +62,14 @@ fn next_valid_password(password: &str) -> String {
 }
 
 generate_tests!(
-    2015,     // year
-    11,       // day
-    part_1,   // part 1 function
-    part_2,   // part 2 function
-    vec![],   // part 1 examples
-    vec![],   // part 2 examples
-    Some(-1), // run part 1, expect -1 since we don't know the right answer yet
-    None      // don't run part 2 until we're ready
+    2015,                         // year
+    11,                           // day
+    part_1,                       // part 1 function
+    part_2,                       // part 2 function
+    vec![],                       // part 1 examples
+    vec![],                       // part 2 examples
+    Some("hxbxxyzz".to_string()), // run part 1, expect -1 since we don't know the right answer yet
+    None                          // don't run part 2 until we're ready
 );
 
 #[cfg(test)]
