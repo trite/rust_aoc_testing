@@ -12,7 +12,7 @@ generate_tests!(
     part_1,         // part 1 function
     part_2,         // part 2 function
     vec![("", -1)], // part 1 examples
-    vec![("", -1)], // part 2 examples
-    -1,             // part 1 expected
-    -1              // part 2 expected
+    vec![],         // part 2 examples
+    Some(-1), // run part 1, expect -1 since we don't know the right answer yet
+    None      // don't run part 2 until we're ready
 );
