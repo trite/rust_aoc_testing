@@ -42,7 +42,7 @@ fn is_valid_password(password: &str) -> bool {
 fn next_password_value(password: &str) -> String {
     let mut password = password.to_string().into_bytes();
     let mut i = password.len() - 1;
-    while i >= 0 {
+    loop {
         if password[i] == b'z' {
             password[i] = b'a';
             i -= 1;
