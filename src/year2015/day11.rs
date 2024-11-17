@@ -2,8 +2,9 @@ pub fn part_1(input: &str) -> String {
     next_valid_password(input)
 }
 
-pub fn part_2(_input: &str) -> i32 {
-    panic!("Not yet implemented");
+pub fn part_2(input: &str) -> String {
+    let first_password = next_valid_password(input);
+    next_valid_password(&first_password)
 }
 
 fn is_valid_password(password: &str) -> bool {
@@ -69,7 +70,7 @@ generate_tests!(
     vec![],                       // part 1 examples
     vec![],                       // part 2 examples
     Some("hxbxxyzz".to_string()), // run part 1, expect -1 since we don't know the right answer yet
-    None                          // don't run part 2 until we're ready
+    Some("".to_string())          // don't run part 2 until we're ready
 );
 
 #[cfg(test)]
