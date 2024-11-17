@@ -8,20 +8,20 @@ fn get_input(
     fs::read_to_string(&path).expect(&format!("Failed to read from {}", path))
 }
 
-pub fn run_part_against_input(
+pub fn run_part_against_input<T: PartialEq + std::fmt::Debug>(
     year: i32,
     day: i32,
-    part: fn(&str) -> i32,
-    expected: i32,
+    part: fn(&str) -> T,
+    expected: T,
 ) {
     let input = get_input(year, day);
     let result = part(&input);
     assert_eq!(result, expected);
 }
 
-pub fn run_examples(
-    examples: Vec<(&str, i32)>,
-    part: fn(&str) -> i32,
+pub fn run_examples<T: PartialEq + std::fmt::Debug>(
+    examples: Vec<(&str, T)>,
+    part: fn(&str) -> T,
 ) {
     examples
         .iter()
