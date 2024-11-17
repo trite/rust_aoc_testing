@@ -1,3 +1,6 @@
+use itertools::Itertools;
+use std::collections::HashMap;
+
 #[derive(Debug, PartialEq)]
 struct Happiness {
     person: String,
@@ -28,8 +31,45 @@ impl Happiness {
     }
 }
 
-pub fn part_1(_input: &str) -> i32 {
-    panic!("Not yet implemented");
+fn calculate_max_happiness(happiness_list: Vec<Happiness>) -> i32 {
+    let mut happiness_map: HashMap<(&str, &str), i32> = HashMap::new();
+    let mut people: Vec<&str> = Vec::new();
+
+    for happiness in &happiness_list {
+        happiness_map
+            .insert((&happiness.person, &happiness.neighbor), happiness.change);
+        if !people.contains(&happiness.person.as_str()) {
+            people.push(&happiness.person);
+        }
+    }
+
+    let mut max_happiness = i32::MIN;
+
+    for permutation in people.iter().permutations(people.len()) {
+        let mut total_happiness = 0;
+
+        for i in 0..permutation.len() {
+            let person = permutation[i];
+            let neighbor = permutation[(i + 1) % permutation.len()];
+            total_happiness +=
+                happiness_map.get(&(person, neighbor)).unwrap_or(&0);
+            total_happiness +=
+                happiness_map.get(&(neighbor, person)).unwrap_or(&0);
+        }
+
+        if total_happiness > max_happiness {
+            max_happiness = total_happiness;
+        }
+    }
+
+    max_happiness
+}
+
+pub fn part_1(input: &str) -> i32 {
+    let happiness_list: Vec<Happiness> =
+        input.lines().map(Happiness::parse).flatten().collect();
+
+    calculate_max_happiness(happiness_list)
 }
 
 pub fn part_2(_input: &str) -> i32 {
@@ -37,18 +77,17 @@ pub fn part_2(_input: &str) -> i32 {
 }
 
 generate_tests!(
-    2015,           
-
-    13,             
-    part_1,         
-    part_2,         
+    2015,
+    13,
+    part_1,
+    part_2,
     vec![(
         "Alice would gain 54 happiness units by sitting next to Bob.\nAlice would lose 79 happiness units by sitting next to Carol.\nAlice would lose 2 happiness units by sitting next to David.\nBob would gain 83 happiness units by sitting next to Alice.\nBob would lose 7 happiness units by sitting next to Carol.\nBob would lose 63 happiness units by sitting next to David.\nCarol would lose 62 happiness units by sitting next to Alice.\nCarol would gain 60 happiness units by sitting next to Bob.\nCarol would gain 55 happiness units by sitting next to David.\nDavid would gain 46 happiness units by sitting next to Alice.\nDavid would lose 7 happiness units by sitting next to Bob.\nDavid would gain 41 happiness units by sitting next to Carol.",
-        -1
-    )], // part 1 examples
-    vec![],         // part 2 examples
-    Some(-1), // run part 1, expect -1 since we don't know the right answer yet
-    None      // don't run part 2 until we're ready
+        330
+    )],
+    vec![],
+    Some(709),
+    None
 );
 
 #[cfg(test)]
@@ -169,5 +208,61 @@ mod local_tests {
         expected: Option<Happiness>,
     ) {
         assert_eq!(Happiness::parse(input), expected);
+    }
+
+    #[test]
+    fn test_calculate_max_happiness() {
+        let happiness_list = vec![
+            Happiness::parse(
+                "Alice would gain 54 happiness units by sitting next to Bob.",
+            )
+            .unwrap(),
+            Happiness::parse(
+                "Alice would lose 79 happiness units by sitting next to Carol.",
+            )
+            .unwrap(),
+            Happiness::parse(
+                "Alice would lose 2 happiness units by sitting next to David.",
+            )
+            .unwrap(),
+            Happiness::parse(
+                "Bob would gain 83 happiness units by sitting next to Alice.",
+            )
+            .unwrap(),
+            Happiness::parse(
+                "Bob would lose 7 happiness units by sitting next to Carol.",
+            )
+            .unwrap(),
+            Happiness::parse(
+                "Bob would lose 63 happiness units by sitting next to David.",
+            )
+            .unwrap(),
+            Happiness::parse(
+                "Carol would lose 62 happiness units by sitting next to Alice.",
+            )
+            .unwrap(),
+            Happiness::parse(
+                "Carol would gain 60 happiness units by sitting next to Bob.",
+            )
+            .unwrap(),
+            Happiness::parse(
+                "Carol would gain 55 happiness units by sitting next to David.",
+            )
+            .unwrap(),
+            Happiness::parse(
+                "David would gain 46 happiness units by sitting next to Alice.",
+            )
+            .unwrap(),
+            Happiness::parse(
+                "David would lose 7 happiness units by sitting next to Bob.",
+            )
+            .unwrap(),
+            Happiness::parse(
+                "David would gain 41 happiness units by sitting next to Carol.",
+            )
+            .unwrap(),
+        ];
+
+        assert_eq!(calculate_max_happiness(happiness_list), 330);
     }
 }
