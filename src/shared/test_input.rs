@@ -30,7 +30,7 @@ pub fn run_examples<T: PartialEq + std::fmt::Debug>(
             assert_eq!(
                 part(input),
                 *expected,
-                "Test failed for index: {}, example: ({}, {})",
+                "Test failed for index: {}, example: ({:?}, {:?})",
                 index,
                 input,
                 expected

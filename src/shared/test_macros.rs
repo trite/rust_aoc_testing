@@ -29,14 +29,19 @@ macro_rules! generate_tests {
 
             #[test_case($year, $day, $part_1, $part_1_expected; "p1")]
             #[test_case($year, $day, $part_2, $part_2_expected; "p2")]
-            fn actual_input<T: PartialEq + std::fmt::Debug>(
+            fn actual_input<T: PartialEq + std::fmt::Debug + Clone>(
                 year: i32,
                 day: i32,
                 part: fn(&str) -> T,
                 expected: Option<T>,
             ) {
                 expected.iter().for_each(|expected| {
-                    run_part_against_input(year, day, part, expected.clone());
+                    run_part_against_input(
+                        year,
+                        day,
+                        part,
+                        (*expected).clone(),
+                    );
                 });
             }
         }
