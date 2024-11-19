@@ -7,14 +7,14 @@ pub fn part_2(_input: &str) -> i32 {
 }
 
 generate_tests!(
-    -2015,          // year
-    -1,             // day
-    part_1,         // part 1 function
-    part_2,         // part 2 function
+    -2015,
+    -1,
+    part_1,
+    part_2,
     vec![("", -1)], // part 1 examples
     vec![],         // part 2 examples
-    Some(-1), // run part 1, expect -1 since we don't know the right answer yet
-    None      // don't run part 2 until we're ready
+    Some(-1),       // run part 1, expect -1 till we have an answer
+    None            // don't run part 2 until we're ready
 );
 
 #[cfg(test)]
