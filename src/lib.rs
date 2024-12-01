@@ -1,6 +1,7 @@
 #[macro_use]
 pub mod shared;
 pub mod year2015;
+pub mod year2024;
 
 // Leaving the default example here, it's a nice way to confirm that the project is working as expected.
 

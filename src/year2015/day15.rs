@@ -1,6 +1,5 @@
-use std::str::FromStr;
-
 #[derive(Debug, PartialEq)]
+#[allow(dead_code)]
 struct Ingredient {
     name: String,
     capacity: i32,
@@ -10,6 +9,7 @@ struct Ingredient {
     calories: i32,
 }
 
+#[allow(dead_code)]
 fn parse_ingredient(input: &str) -> Vec<Ingredient> {
     input
         .lines()
