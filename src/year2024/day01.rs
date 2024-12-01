@@ -64,6 +64,6 @@ generate_tests!(
     part_2,
     vec![("3   4\n4   3\n2   5\n1   3\n3   9\n3   3", 11)], // part 1 examples
     vec![("3   4\n4   3\n2   5\n1   3\n3   9\n3   3", 31)], // part 2 examples
-    Some(1579939), // run part 1, expect -1 till we have an answer
-    Some(-1)       // don't run part 2 until we're ready
+    Some(1579939),  // run part 1, expect -1 till we have an answer
+    Some(20351745)  // don't run part 2 until we're ready
 );
