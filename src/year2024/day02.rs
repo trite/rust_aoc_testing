@@ -15,6 +15,33 @@ fn parse_line(input: &str) -> Option<Vec<i32>> {
     numbers.ok()
 }
 
+/* Prompt:
+   Create a function that takes a vector of integers and validates it. The input is valid if all values are either increasing or decreasing in value and if any two adjacent integers differ by at least 1 and at most 3.
+*/
+fn validate_vector(numbers: &Vec<i32>) -> bool {
+    if numbers.len() < 2 {
+        return false;
+    }
+
+    let mut increasing = true;
+    let mut decreasing = true;
+
+    for window in numbers.windows(2) {
+        let diff = (window[1] - window[0]).abs();
+        if diff < 1 || diff > 3 {
+            return false;
+        }
+        if window[1] < window[0] {
+            increasing = false;
+        }
+        if window[1] > window[0] {
+            decreasing = false;
+        }
+    }
+
+    increasing || decreasing
+}
+
 generate_tests!(
     2024,
     2,
@@ -55,5 +82,17 @@ mod local_tests {
         expected: Option<Vec<i32>>,
     ) {
         assert_eq!(parse_line(input), expected);
+    }
+
+    #[test_case(vec![1, 2, 3, 4, 5], true; "valid increasing")]
+    #[test_case(vec![5, 4, 3, 2, 1], true; "valid decreasing")]
+    #[test_case(vec![1, 3, 5, 7, 9], false; "invalid increasing")]
+    #[test_case(vec![9, 7, 5, 3, 1], false; "invalid decreasing")]
+    #[test_case(vec![1, 2, 4, 7, 10], false; "invalid difference")]
+    fn validate_vector_test(
+        input: Vec<i32>,
+        expected: bool,
+    ) {
+        assert_eq!(validate_vector(&input), expected);
     }
 }
