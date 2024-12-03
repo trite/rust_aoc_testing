@@ -1,7 +1,14 @@
 use regex::Regex;
 
-pub fn part_1(_input: &str) -> i32 {
-    panic!("Not yet implemented");
+/* Prompt:
+    Modify the part_1 function so that it runs parse on its input string, then multiplies the values in each tuple and sums the results.
+*/
+pub fn part_1(input: &str) -> i32 {
+    if let Some(pairs) = parse(input) {
+        pairs.iter().map(|(left, right)| left * right).sum()
+    } else {
+        0
+    }
 }
 
 pub fn part_2(_input: &str) -> i32 {
@@ -39,7 +46,7 @@ generate_tests!(
     part_2,
     vec![("xmul(2,4)%&mul[3,7]!@^do_not_mul(5,5)+mul(32,64]then(mul(11,8)mul(8,5))", 161)], // part 1 examples
     vec![],         // part 2 examples
-    Some(-1),       // run part 1, expect -1 till we have an answer
+    Some(171183089),       // run part 1, expect -1 till we have an answer
     None            // don't run part 2 until we're ready
 );
 
