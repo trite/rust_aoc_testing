@@ -4,9 +4,10 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
+itertools = "*"
 md5 = "*"
 rayon = "*"
-itertools = "*"
+regex = "*"
 serde_json = "*"
 
 [dev-dependencies]
